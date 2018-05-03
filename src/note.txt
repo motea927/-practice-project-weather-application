@@ -1,0 +1,3 @@
+了解async與sync差異及運作原理
+使用google geocode api
+使用request
