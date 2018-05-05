@@ -1,8 +1,37 @@
-const request = require('request');
 
-request({
-    url:'https://maps.googleapis.com/maps/api/geocode/json?address=811%E5%8F%B0%E7%81%A3%E9%AB%98%E9%9B%84%E5%B8%82%E6%A5%A0%E6%A2%93%E5%8D%80%E6%B5%B7%E5%B0%88%E8%B7%AF142%E8%99%9F',
-    json:true
-}, (err, res, body) =>{
-    console.log(JSON.stringify(body,undefined,2));
+const yargs = require('yargs');
+
+const geocode = require('./geocode/geocode');
+const weather = require('./weather/weather');
+
+const argv = yargs
+.options({
+    a:{
+        demand: false,
+        alias: 'address',
+        describe: 'Address to fetch weather for',
+        string: true
+    }
+})
+.help()
+.alias('help', 'h')
+.argv;
+
+argv.a = argv.a || '台灣高雄市楠梓區';
+
+geocode.geocodeAddress(argv.a , (errorMessage, results) =>{
+    if (errorMessage){
+        console.log(errorMessage);
+    }else {
+        console.log(results.address);
+
+        weather.getWeather(results.latitude, results.longitude, (errorMessage, weatherResults) => {
+            if (errorMessage){
+                console.log(errorMessage);
+            }else{
+                console.log(`It's currently ${weatherResults.temperature}°C. It feels like ${weatherResults.apparentTemperature}°C .`);
+            }
+        });
+
+    }
 });

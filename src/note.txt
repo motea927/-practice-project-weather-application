@@ -1,3 +1,6 @@
 了解async與sync差異及運作原理
 使用google geocode api
 使用request
+使用yargs簡化參數流程
+了解URI編碼並使用encodeURIcomponent();
+了解promise機制與then鏈及catch
